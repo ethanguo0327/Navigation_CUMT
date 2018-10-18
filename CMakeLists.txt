@@ -10,8 +10,11 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
+  rospy
   std_msgs
   serial REQUIRED
+  tf
+  nav_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -106,7 +109,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS  include
 #  LIBRARIES nav_cubot
-  CATKIN_DEPENDS geometry_msgs roscpp std_msgs
+  CATKIN_DEPENDS geometry_msgs roscpp std_msgs tf nav_msgs
 #DEPENDS system_lib
 )
 
@@ -117,15 +120,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-    ./include/nav_cubot
+    include/nav_cubot
   ${catkin_INCLUDE_DIRS}
   ${serial_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/nav_cubot.cpp
-# )
+ add_library(${PROJECT_NAME}
+   src/Communication_Func.cpp
+ )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -149,6 +152,7 @@ include_directories(
 
 ## Specify libraries to link a library or executable target against
  target_link_libraries(${PROJECT_NAME}_node
+   ${PROJECT_NAME}
    ${catkin_LIBRARIES}
    ${serial_LIBRARIES}
  )
