@@ -5,7 +5,7 @@
 #ifndef PROJECT_NAV_COMMUNICATION_H
 #define PROJECT_NAV_COMMUNICATION_H
 
-#endif //PROJECT_NAV_COMMUNICATION_H
+
 #include <serial/serial.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
@@ -55,6 +55,8 @@ public:
 private:
     ODOM odom={0.0,0.0,0.0,//声明里程计结构体
                0.0,0.0,0.0};
+    ODOM odom_out={0.0,0.0,0.0,//声明里程计结构体
+               0.0,0.0,0.0};
     serial::Serial ser; //声明串口对象
     ros::NodeHandle n;//ros节点句柄
     ros::Publisher pub;//odom topic 发布器
@@ -62,3 +64,4 @@ private:
     tf::TransformBroadcaster odom_broadcaster_;//tf发布器
 };
 
+#endif //PROJECT_NAV_COMMUNICATION_H

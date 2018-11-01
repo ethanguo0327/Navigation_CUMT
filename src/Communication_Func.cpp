@@ -8,10 +8,11 @@
 #include <tf/transform_broadcaster.h>
 #include <geometry_msgs/Twist.h>
 #include <Communication_Func.h>
+#include "middle_filter.h"
 using namespace std;
 READ_WRITE::READ_WRITE() {
     ROS_INFO_STREAM("Initilizing serial port...");
-    ser.setPort("/dev/ttyUSB0");//串口号
+    ser.setPort("/dev/usart_nav");//串口号(将电脑上的某个固定的usb口重命名为usart,放弃使用易变的/dev/ttyUSB*)
     ser.setBaudrate(115200);//波特率
     serial::Timeout to = serial::Timeout::simpleTimeout(1000);//字节间读写超时设为1s
     ser.setTimeout(to);//设置串口超时
@@ -63,14 +64,16 @@ void READ_WRITE::Read_Odom_Raw() {
                 odom.x = c2f.odom_serial[4];
                 odom.y = c2f.odom_serial[5];
                 odom.angle = c2f.odom_serial[6];
-
-                cout<<"odom.y= "<<odom.y<<endl;//57.2957
+//                cout<<"odom.y= "<<odom.y<<endl;//57.2957
                 odom_raw.clear();
+                //中值滤波过滤跳变
+                odom_out=middle_filter(odom);
+                cout<<odom_out.x<<endl;
                 ros::Time current_time=ros::Time::now();
                 //发布odom topic
-                Pub_Odom(&odom,current_time);
+                Pub_Odom(&odom_out,current_time);
                 //发布odom tf
-                Pub_tf(&odom,current_time);
+                Pub_tf(&odom_out,current_time);
                 }
 
         }
@@ -87,7 +90,7 @@ void READ_WRITE::Pub_Odom(ODOM* odom1,ros::Time current_time) {
     /*!@TODO：
      * @child_frame 在消息里做什么用？
      */
-    odom.child_frame_id="base_link";
+    odom.child_frame_id="base_footprint";
     odom.pose.pose.position.x = odom1->x;
     odom.pose.pose.position.y = odom1->y;
     odom.pose.pose.position.z = 0.0;
@@ -100,7 +103,7 @@ void READ_WRITE::Pub_tf(ODOM* odom2,ros::Time current_time){
     geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time;
     odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_link";
+    odom_trans.child_frame_id = "base_footprint";
     odom_trans.transform.translation.x = odom2->x;
     odom_trans.transform.translation.y = odom2->y;
     odom_trans.transform.translation.z = 0.0;
