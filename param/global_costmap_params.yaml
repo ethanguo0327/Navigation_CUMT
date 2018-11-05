@@ -1,0 +1,12 @@
+global_costmap:
+   global_frame: /map
+   robot_base_frame: /base_footprint #通过此两者的tf转换得到机器人在map中的坐标
+   update_frequency: 1.0 #全局代价地图更新频率，一般全局代价地图更新频率设置的比较小 @TODO：全局代价地图还更新？？
+   publish_frequency: 0.5
+   static_map: true 
+   transform_tolerance: 0.5 #坐标系间的转换可以忍受的最大延时
+   plugins: #地图由哪三层组成
+     - {name: static_layer,            type: "costmap_2d::StaticLayer"}
+     - {name: obstacle_layer,          type: "costmap_2d::ObstacleLayer"}
+     - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
+

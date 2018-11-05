@@ -1,0 +1,20 @@
+# Default parameters used by the yocs_velocity_smoother module.
+# This isn't used by minimal.launch per se, rather by everything
+# which runs on top.
+
+# Mandatory parameters
+speed_lim_v: 0.8
+speed_lim_w: 5.4
+
+accel_lim_v: 1.0 # maximum is actually 2.0, but we push it down to be smooth
+accel_lim_w: 2.0
+
+# Optional parameters
+frequency: 20.0 #速度发布频率
+decel_factor: 1.5 #加速/减速比
+
+# Robot velocity feedback type:
+#  0 - none (default)
+#  1 - odometry
+#  2 - end robot commands
+robot_feedback: 2 #为防止速度跳变，选用哪种速度消息来做对比. 2的意思是，假设机器人对速度指令的执行力还不错，但是当速度指令有可能会跳变（如遥控器拨杆突然被拨，或者从遥控器突然转换为nav下发的指令）1就适用于机器人惯性大、地形有阻力等机器人执行力达不到的情况，这时就用里程计里的速度做反馈

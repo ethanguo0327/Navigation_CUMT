@@ -1,0 +1,31 @@
+# Obstacle Cost Shaping (http://wiki.ros.org/costmap_2d/hydro/inflation)
+# robot_radius: 0.20  # distance a circular robot should be clear of the obstacle (kobuki: 0.18)
+footprint: [[-0.27, 0.27], [0.27, 0.27],[0.27, -0.27],[-0.27, -0.27]] # 底盘的各角的坐标（机器人底盘中心为[0,0]），0.27为机器人半宽（半长）
+
+obstacle_layer:
+  enabled:              true
+  combination_method:   1
+  track_unknown_space:  true    #true 时允许全局路径规划规划到未知区域 【需和global_planner的yaml中allow_unknown配合】
+  obstacle_range: 2.5 #2.5米以内的障碍物，才被引入到代价地图中
+  raytrace_range: 3.0 #在3.0米以内，根据扫描数据清除先前引入的障碍物
+  observation_sources:  scan #观察传感器源
+  scan: 
+    sensor_frame: laser #激光的frame id
+    data_type: LaserScan
+    topic: scan
+    marking: true #是否允许传感器向代价地图添加障碍物
+    clearing: true #是否允许传感器从代价地图清除障碍物
+    min_obstacle_height: 0.25 #最低障碍物
+    max_obstacle_height: 0.60 #最高障碍物  名字起得不好，本意是对传感器数据在z轴上进行剪裁，应该起名为min/max_scan_height.此范围应该包括激光雷达高度h（即设定的tf）
+  
+
+#cost_scaling_factor and inflation_radius were now moved to the inflation_layer ns
+inflation_layer:
+  enabled:              true
+  cost_scaling_factor:  5.0  # exponential rate at which the obstacle cost drops off (default: 10)  #决定了cost往外膨胀时递减的快慢程度
+  inflation_radius:     0.2  # 代价从内切半径处开始往外扩散（以负指数的形式），直到膨胀半径
+
+static_layer:
+  enabled:              true
+  
+

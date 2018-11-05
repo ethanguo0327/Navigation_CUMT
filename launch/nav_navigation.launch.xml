@@ -1,0 +1,25 @@
+<launch>
+  <!-- Lidar -->
+  <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+
+  <!-- Map server -->
+  <arg name="map_file" default="~/nav_ws/maps/405_1030_1.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!-- AMCL --> 
+  <arg name="initial_pose_x" default="0.0"/> <!-- 留出接口，等待用户在rviz中点出初始位姿 -->
+  <arg name="initial_pose_y" default="0.0"/> 
+  <arg name="initial_pose_a" default="0.0"/>
+  <include file="$(find nav_cubot)/launch/nav_amcl.launch.xml"><!-- amcl的其他参数 -->
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
+  </include>
+
+  <!-- Move base -->
+  <arg name="custom_param_file" default="$(find nav_cubot)/param/nav_costmap_params.yaml"/><!-- 用户定制参数 -->
+  <include file="$(find nav_cubot)/launch/nav_move_base.launch.xml">
+    <arg name="custom_param_file" value="$(arg custom_param_file)"/>
+  </include>
+
+</launch>

@@ -1,0 +1,49 @@
+DWAPlannerROS:
+
+# Robot Configuration Parameters - nav_cubot
+  max_vel_x: 0.5  # 0.55
+  min_vel_x: 0.0  # x方向最小值绝对值,如果为负值表示可以后退
+
+  max_vel_y: 0.0  # diff drive robot
+  min_vel_y: 0.0  # diff drive robot
+
+  max_trans_vel: 0.5 # choose slightly less than the base's capability
+  min_trans_vel: 0.1  # this is the min trans velocity when there is negligible rotational velocity
+
+  # Warning!
+  #   do not set min_trans_vel to 0.0 otherwise dwa will always think translational velocities
+  #   are non-negligible and small in place rotational velocities will be created.
+
+  max_rot_vel: 5.0  # choose slightly less than the base's capability
+  min_rot_vel: 0.4  # this is the min angular velocity when there is negligible translational velocity
+  rot_stopped_vel: 0.4
+  
+  acc_lim_x: 1.0 # maximum is theoretically 2.0, but we 
+  acc_lim_theta: 2.0
+  acc_lim_y: 0.0      # diff drive robot
+
+# Goal Tolerance Parameters
+  yaw_goal_tolerance: 0.3  # 0.05 单位：弧度
+  xy_goal_tolerance: 0.15  # 0.10 
+  # latch_xy_goal_tolerance: false #true：即使在调整朝向的过程中坐标发生偏离，超出了容忍度，仍然认为到达了目标点
+
+# Forward Simulation Parameters
+  sim_time: 1.0       # 1.7 在采样速度下以此时间模拟行走轨迹，太小<2因为模拟的路径短会导致行走不流畅，太大>5导致路线僵硬不细腻
+  vx_samples: 6       # 3  模拟几个vx
+  vy_samples: 1       # diff drive robot, there is only one sample
+  vtheta_samples: 20  # 20 模拟几个vth，一般都比上两个大
+
+# Trajectory Scoring Parameters
+  path_distance_bias: 64.0      # 32.0   衡量有多贴近全局路径的权重
+  goal_distance_bias: 24.0      # 24.0   衡量有多靠近局部目标点的权重
+  occdist_scale: 0.5            # 0.01   衡量避障代价的权重（即这条路径所占格子的cost之和）
+  forward_point_distance: 0.325 # 0.325  - how far along to place an additional scoring point
+  stop_time_buffer: 0.2         # 0.2    提前多少秒停可以避免发生碰撞，当然这个时间越短越好
+  scaling_speed: 0.25           # 0.25   启动机器人底盘的速度基准
+  max_scaling_factor: 0.2       # 0.2    对上面的速度进行缩放，最大放大倍数
+
+# Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05  # 0.05   想重置震荡flag（认为不震荡了）需要至少向前走了多少
+
+# Differential-drive robot configuration - necessary?
+#  holonomic_robot: false

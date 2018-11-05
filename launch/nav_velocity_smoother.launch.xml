@@ -1,0 +1,13 @@
+<!-- 
+         Velocity smoother
+-->
+<launch>
+  <node pkg="nodelet" type="nodelet" name="navigation_velocity_smoother" args="load yocs_velocity_smoother/VelocitySmootherNodelet mobile_base_nodelet_manager">
+    <rosparam file="$(find nav_cubot)/param/nav_smoother.yaml" command="load"/>
+    <remap from="navigation_velocity_smoother/smooth_cmd_vel" to="nav_cmd_vel"/><!--最终输出的速度消息名-->
+
+    <!-- Robot velocity feedbacks; use the default base configuration -->
+    <remap from="navigation_velocity_smoother/odometry" to="odom"/><!--里程计的topic名.如果用里程计里的速度做反馈-->
+    <remap from="navigation_velocity_smoother/robot_cmd_vel" to="mobile_base/commands/velocity"/><!--控制指令速度topic名.如果用指令速度做反馈-->
+  </node>
+</launch>

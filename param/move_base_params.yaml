@@ -1,0 +1,24 @@
+# Move base node parameters. For full documentation of the parameters in this file, please see
+#
+#  http://www.ros.org/wiki/move_base
+#
+shutdown_costmaps: false #当move_base在不活动状态时,是否关掉costmap
+
+controller_frequency: 5.0 #控制指令下发频率
+controller_patience: 3.0 #如果局部规划器这些秒了还没规划出可用速度，那么就进入旋转恢复状态去尝试清理障碍物
+
+
+planner_frequency: 1.0 #全局规划操作的执行频率，如果设置为0.0,则全局规划器仅在接收到新的目标点或者局部规划器报告路径堵塞时才会重新执行规划操作
+planner_patience: 5.0
+
+oscillation_timeout: 10.0 #机器人震荡时间超过此，则认为发生了异常（比如说一直在撞一个东西，但传感器没有检测到障碍物）
+oscillation_distance: 0.2 #震荡距离，大于此则不认为是在震荡
+
+# local planner - default is trajectory rollout
+base_local_planner: "dwa_local_planner/DWAPlannerROS" #选择局部路径规划器
+
+base_global_planner: "navfn/NavfnROS"  #全局路径规划器  global_planner/GlobalPlanner, carrot_planner/CarrotPlanner
+
+#recovery_behavior_enabled: true
+
+
