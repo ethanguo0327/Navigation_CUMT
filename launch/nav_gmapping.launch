@@ -1,0 +1,17 @@
+<launch>
+  <!-- middle node -->
+  <node pkg="nav_cubot" type="nav_cubot_node" respawn="false" name="nav_communication" />
+  <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0.1 0 0 0 1 base_footprint base_link 100" /> 
+
+  <!-- rplidar a1 -->
+  <include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+  <node pkg="tf" type="static_transform_publisher" name="laser_base" args="0.135 0.09 0.42 0 0 0 1 base_link laser 100" /> 
+
+  <!-- Gmapping -->
+  <arg name="sensor_gmapping_launch_file" default="$(find nav_cubot)/launch/rplidarA1_gmapping.launch"/>
+  <include file="$(arg sensor_gmapping_launch_file)"/>
+
+  <!-- Move base -->
+  <include file="$(find nav_cubot)/launch/nav_move_base.launch.xml"/>
+
+</launch>

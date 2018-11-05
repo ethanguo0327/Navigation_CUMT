@@ -1,0 +1,4 @@
+1. nav_gmapping.launch是实行gmapping的launch文件,包含启动雷达,gmapping包和movebase.
+2. rplidarA1_gmapping.launch调用gmapping节点并设定一些参数.TODO:比较turtlebot中不同传感器的gmapping参数.
+3. nav_move_base_launch.xml调用movebase包,添加一些速度平滑功能,读取地图参数配置文件,movebase参数配置文件,路径规划参数配置文件,以及管理topic和tf的重命名.TODO:1建图时是否需要这些参数.2速度平滑器发布的速度topic名称.
+
